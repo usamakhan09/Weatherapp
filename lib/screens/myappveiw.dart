@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weatherapp/screens/landing/homescreenveiw.dart';
+import 'package:weatherapp/screens/splash/splashScreenVeiwmodel.dart';
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -7,7 +7,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return   MaterialApp(
       // home: SplashScreen1(),
-      home: LandingScreenVeiw(),
+      home: SplashScreen1(),
       debugShowCheckedModeBanner: false,
     );
   }

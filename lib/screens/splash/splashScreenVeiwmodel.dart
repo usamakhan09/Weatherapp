@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:weatherapp/screens/homeScreen.dart';
+import 'package:weatherapp/screens/landing/homescreenveiw.dart';
 import 'package:weatherapp/screens/splash/splashScreenVeiw.dart';
 
 class SplashScreen1 extends StatefulWidget {
@@ -31,7 +31,7 @@ class SplashState extends State<SplashScreen1> {
 
   route() {
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const HomeScreen()));
+        context, MaterialPageRoute(builder: (context) => const LandingScreenVeiw()));
   }
 
   initScreen(BuildContext context) {

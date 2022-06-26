@@ -1,6 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:weatherapp/base/apikey.dart';
+import 'package:weatherapp/models/cities.dart';
+import 'package:weatherapp/models/forcastResponse.dart';
+import 'package:weatherapp/screens/displayscreen/homeVeiw.dart';
 import 'package:weatherapp/screens/selectCityScreen/selectCityveiw.dart';
+import 'package:weatherapp/service/api_service.dart';
 import 'package:weatherapp/widgets/appButton.dart';
 class LandingScreenVeiw extends StatefulWidget {
   const LandingScreenVeiw({Key? key}) : super(key: key);
@@ -10,6 +15,8 @@ class LandingScreenVeiw extends StatefulWidget {
 }
 
 class _LandingScreenVeiwState extends State<LandingScreenVeiw> {
+  bool isloading=false;
+
   @override
   Widget build(BuildContext context) {
     List<String> cities=['Select City','karachi','lahore','islamabad'];
@@ -52,32 +59,28 @@ class _LandingScreenVeiwState extends State<LandingScreenVeiw> {
 
                           ),
                 ),
-                  // decoration: InputDecoration(
-                  //       enabledBorder:OutlineInputBorder(
-                  //         borderRadius: BorderRadius.circular(10),
-                  //         borderSide: BorderSide(width: 3,color:Colors.blue,)
-                  //
-                  //       ),
+
                 value: selecteditem,
                 items:cities.map((item) => DropdownMenuItem<String>(
                   value: item,
                     child:Text(item,style: TextStyle(fontSize: 20,color: Colors.white,fontWeight: FontWeight.w500,fontFamily: 'Poppins'),),
                 )).toList(),
-                onChanged: (item)=>setState(()=>selecteditem=item),
+                onChanged: (item)async{
+                  setState(()=>selecteditem=item);
+                  ApiResponseService apiresponse= ApiResponseService();
+                  var ans =  await apiresponse.getResponseCity(apiKey: ApiKey.key, cityName: item);
+                  Cities.selecteditem=item;
+                  // apiresponse= await apiresponse.getResponse(apiKey: ApiKey.key);
+                  // getHttp();
+                  Navigator.of(context)
+                      .push(
+                      MaterialPageRoute(builder: (_) =>  HomeVeiw(apiresponse:ans??APIResponse())));
+
+
+                },
 
               )
-              // DropdownButtonFormField<String>(
-              //   decoration: InputDecoration(
-              //     enabledBorder:OutlineInputBorder(
-              //       borderRadius: BorderRadius.circular(10),
-              //       borderSide: BorderSide(width: 3,color:Colors.blue,)
-              //
-              //     ),
-              //   )
-              //   items: cities,
-              //   value: selecteditem,
-              //   onChanged: ,
-              // ),
+
             ),
 
           ],
