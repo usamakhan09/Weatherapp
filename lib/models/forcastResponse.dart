@@ -12,6 +12,9 @@ class APIResponse {
         : null;
     current =
     json['current'] != null ? new Current.fromJson(json['current']) : null;
+    forecast = json['forecast'] != null
+        ? new Forecast.fromJson(json['forecast'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -21,6 +24,9 @@ class APIResponse {
     }
     if (this.current != null) {
       data['current'] = this.current!.toJson();
+    }
+    if (this.forecast != null) {
+      data['forecast'] = this.forecast!.toJson();
     }
     return data;
   }

@@ -14,6 +14,7 @@ class SplashState extends State<SplashScreen1> {
   @override
   void initState() {
     super.initState();
+
     startTime();
   }
 
@@ -25,7 +26,7 @@ class SplashState extends State<SplashScreen1> {
   }
 
   startTime() async {
-    var duration = const Duration(seconds: 6);
+    var duration = const Duration(seconds: 2);
     return Timer(duration, route);
   }
 
@@ -35,10 +36,12 @@ class SplashState extends State<SplashScreen1> {
   }
 
   initScreen(BuildContext context) {
+
     return const Scaffold(
       body: Center(
         child: SplashScreenVeiw(),
       ),
     );
+
   }
 }

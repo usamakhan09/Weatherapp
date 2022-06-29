@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:weatherapp/models/forcastResponse.dart';
 import 'package:weatherapp/widgets/appbar.dart';
+import 'package:intl/intl.dart';
+import 'package:weatherapp/widgets/forcast_Card.dart';
 class HomeVeiw extends StatefulWidget {
   APIResponse apiresponse;
+  final dateFormat = DateFormat('h:mm a');
   HomeVeiw({Key? key,required this.apiresponse}) : super(key: key);
 
   @override
@@ -10,12 +13,6 @@ class HomeVeiw extends StatefulWidget {
 }
 
 class _HomeVeiwState extends State<HomeVeiw> {
-
-  // @override
-  // void initState() {
-  //   HomeModelVeiw.gettemp(apiresponse ??"");
-  //   super.initState();
-  // }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,9 +22,9 @@ class _HomeVeiwState extends State<HomeVeiw> {
             flex: 2,
               child: Container(
                 height:315 ,
-                decoration: const BoxDecoration(
+                decoration:  BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('assets/images/home.jpg'),
+                    image:((widget.apiresponse.current?.condition?.text)!.contains('Rain'))?AssetImage('assets/images/home.jpg'):((widget.apiresponse.current?.condition?.text)!.contains('Mist'))?AssetImage('assets/images/mist.jpg'):((widget.apiresponse.current?.condition?.text)!.contains('Clear'))?AssetImage('assets/images/clearSky.jpg'):AssetImage('assets/images/wind.jpg'),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -36,13 +33,13 @@ class _HomeVeiwState extends State<HomeVeiw> {
                   body: Column(
                     children: [
                       const SizedBox(height: 61,),
-                      const MyAppBar(),
+                       MyAppBar(apiresponse: widget.apiresponse,),
                       const SizedBox(height: 70,),
                       Center(
                         child: Column(
                           children:  [
-                            Text(widget.apiresponse.current?.tempC.toString()??"",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 99,color: Colors.white),),
-                            Text(((widget.apiresponse.current?.condition?.text).toString()),style: TextStyle(fontSize: 22,fontWeight: FontWeight.w500,color: Colors.white),)
+                            Text('  ${((widget.apiresponse.current?.tempC)?.round().toString())}\u00b0',style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 99,color: Colors.white),),
+                            Text(((widget.apiresponse.current?.condition?.text).toString()),style: const TextStyle(fontSize: 22,fontWeight: FontWeight.w500,color: Colors.white),)
                           ],
                         ),
                       )
@@ -57,62 +54,72 @@ class _HomeVeiwState extends State<HomeVeiw> {
                 child: Scaffold(
                   body:
                   Padding(
-                    padding: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(5),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: 34,),
                         Row(
                           children:  [
-                            Text("Today",style: TextStyle(fontWeight:FontWeight.w500 ,fontSize: 20,fontFamily: 'Poppins'),),
-                            Spacer(),
-                            Text('${((widget.apiresponse.location?.name).toString())}'+',${((widget.apiresponse.location?.country).toString())}',style: TextStyle(fontSize: 15,color: Color(0xff5F5F5F),fontWeight: FontWeight.w500),)
+                            const Text("Today",style: TextStyle(fontWeight:FontWeight.w500 ,fontSize: 20,fontFamily: 'Poppins'),),
+                            const Spacer(),
+                            Text('${((widget.apiresponse.location?.name).toString()).split(" ")[0]}'+',${((widget.apiresponse.location?.country).toString())}',style: const TextStyle(fontSize: 15,color: Color(0xff5F5F5F),fontWeight: FontWeight.w500),)
                           ],
                         ),
                         const SizedBox(height: 39,),
-                        Row(
-                          children: [
-                            SizedBox(width: 10,),
-                            Column(
+                        Expanded(
+                          child: Container(
+                            // color: Color(0xffF1F1F1),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Text("Now"),
-                                SizedBox(height:42,width: 42,child: Image.asset('assets/images/cloud.png',)),
-                                Text(widget.apiresponse.forecast?.forecastday?[2].hour?[1].tempC.toString()??"")
+                                 const SizedBox(width: 15,),
+                                Container(
+                                  width: 60,
+                                  height: 100,
+                                  alignment: Alignment.topLeft,
+                                  decoration: const BoxDecoration(
+                                    border: Border(
+                                      right: BorderSide(color: Color(0xFFd9d9dd),)
+                                    )
+                                  ),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      const Text("Now",style: const TextStyle(fontWeight: FontWeight.w500),),
+                                      const SizedBox(height: 5,),
+                                      SizedBox(height:42,width: 42,child:
+                                      Image.network('https:${(widget.apiresponse.current?.condition?.icon)??""}')
+                                      ),
+                                      const SizedBox(height: 5,),
+                                      Text((widget.apiresponse.current?.tempC).toString(),style: const TextStyle(fontWeight: FontWeight.w400,fontSize: 18)),
+                                      const SizedBox(height: 5,),
+
+                                    ],
+                                  ),
+                                ),
+                                 // SizedBox(width: 25,),
+                                Expanded(
+                                  flex: 2,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                      itemCount: 24,
+                                      itemBuilder: (BuildContext context,int index){
+                                        return Padding(
+                                          padding: const EdgeInsets.only(left:20),
+                                          child: Forcast_card(
+                                              time: widget.dateFormat.format(DateTime.parse((widget.apiresponse.forecast?.forecastday?[0].hour?[index].time).toString())),
+                                              icon: widget.apiresponse.forecast?.forecastday?[0].hour?[index].condition?.icon,
+                                              temC: (widget.apiresponse.forecast?.forecastday?[0].hour?[0].tempC)!.round().toString()),
+                                        );
+
+
+                            }),
+                                )
                               ],
                             ),
-                            SizedBox(width: 34,),
-                            Column(
-                              children: [
-                                Text("9 pm"),
-                                SizedBox(height:42,width: 42,child: Image.asset('assets/images/cloud.png',)),
-                                Text(widget.apiresponse.current?.tempC.toString()??"")
-                              ],
-                            ),
-                            SizedBox(width: 34,),
-                            Column(
-                              children: [
-                                Text("10 pm"),
-                                SizedBox(height:42,width: 42,child: Image.asset('assets/images/cloud.png',)),
-                                Text(widget.apiresponse.current?.tempC.toString()??"")
-                              ],
-                            ),
-                            SizedBox(width: 34,),
-                            Column(
-                              children: [
-                                Text("11 pm"),
-                                SizedBox(height:42,width: 42,child: Image.asset('assets/images/cloud.png',)),
-                                Text(widget.apiresponse.current?.tempC.toString()??"")
-                              ],
-                            ),
-                            SizedBox(width: 34,),
-                            Column(
-                              children: [
-                                Text("12 pm"),
-                                SizedBox(height:42,width: 42,child: Image.asset('assets/images/cloud.png',)),
-                                Text(widget.apiresponse.current?.tempC.toString()??"")
-                              ],
-                            ),
-                          ],
+                          ),
                         )
                       ],
                     ),

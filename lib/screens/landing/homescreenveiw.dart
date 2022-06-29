@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weatherapp/base/apikey.dart';
 import 'package:weatherapp/models/cities.dart';
@@ -67,11 +66,20 @@ class _LandingScreenVeiwState extends State<LandingScreenVeiw> {
                 )).toList(),
                 onChanged: (item)async{
                   setState(()=>selecteditem=item);
+                  setState(() {
+                    showDialog(context: context, builder: (context){return const Center(child: const CircularProgressIndicator(value: 1,color: Colors.black,),);});
+                    selecteditem='Select City';
+                  });
                   ApiResponseService apiresponse= ApiResponseService();
                   var ans =  await apiresponse.getResponseCity(apiKey: ApiKey.key, cityName: item);
                   Cities.selecteditem=item;
                   // apiresponse= await apiresponse.getResponse(apiKey: ApiKey.key);
                   // getHttp();
+
+                  setState(() {
+                    // selecteditem=cities[0];
+                    Navigator.pop(context);
+                  });
                   Navigator.of(context)
                       .push(
                       MaterialPageRoute(builder: (_) =>  HomeVeiw(apiresponse:ans??APIResponse())));

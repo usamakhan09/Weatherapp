@@ -8,17 +8,15 @@ class ApiResponseService {
   double? get temparature => _apiResponse?.current?.tempC;
 
   APIResponse? _apiResponse;
-   String? longi;
-   String? lattii;
 
   getResponse({ required String? apiKey,required String? latti,required String? longi }) async {
     var forcastUrl =
-    Uri.parse(ApiBaseUrl.baseUrl + '/forecast.json?key=${apiKey}&q=''${lattii}'+',${latti}''&aqi=no');
+    Uri.parse(ApiBaseUrl.baseUrl + '/forecast.json?key=${apiKey}&q=${latti},${longi}&aqi=no');
 
     try {
       var response = await http.get(forcastUrl,); // get
 
-      var decodedJson = jsonDecode(response.body) as Map<String, dynamic>;
+      var decodedJson = await jsonDecode(response.body) as Map<String, dynamic>;
       _apiResponse =
           await APIResponse.fromJson(decodedJson);
 
