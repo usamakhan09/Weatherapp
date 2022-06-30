@@ -4,7 +4,7 @@ import 'package:weatherapp/widgets/appbar.dart';
 import 'package:intl/intl.dart';
 import 'package:weatherapp/widgets/forcast_Card.dart';
 class HomeVeiw extends StatefulWidget {
-  APIResponse apiresponse;
+  final APIResponse? apiresponse;
   final dateFormat = DateFormat('h:mm a');
   HomeVeiw({Key? key,required this.apiresponse}) : super(key: key);
 
@@ -24,7 +24,7 @@ class _HomeVeiwState extends State<HomeVeiw> {
                 height:315 ,
                 decoration:  BoxDecoration(
                   image: DecorationImage(
-                    image:((widget.apiresponse.current?.condition?.text)!.contains('Rain'))?AssetImage('assets/images/home.jpg'):((widget.apiresponse.current?.condition?.text)!.contains('Mist'))?AssetImage('assets/images/mist.jpg'):((widget.apiresponse.current?.condition?.text)!.contains('Clear'))?AssetImage('assets/images/clearSky.jpg'):AssetImage('assets/images/wind.jpg'),
+                    image:((widget.apiresponse?.current?.condition?.text)!.contains('rain'))?AssetImage('assets/images/rain.jpg'):((widget.apiresponse?.current?.condition?.text)!.contains('Mist'))?AssetImage('assets/images/mist.jpg'):((widget.apiresponse?.current?.condition?.text)!.contains('Clear'))?AssetImage('assets/images/clearSky.jpg'):AssetImage('assets/images/wind.jpg'),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -33,13 +33,13 @@ class _HomeVeiwState extends State<HomeVeiw> {
                   body: Column(
                     children: [
                       const SizedBox(height: 61,),
-                       MyAppBar(apiresponse: widget.apiresponse,),
+                       MyAppBar(apiresponse: widget.apiresponse!,),
                       const SizedBox(height: 70,),
                       Center(
                         child: Column(
                           children:  [
-                            Text('  ${((widget.apiresponse.current?.tempC)?.round().toString())}\u00b0',style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 99,color: Colors.white),),
-                            Text(((widget.apiresponse.current?.condition?.text).toString()),style: const TextStyle(fontSize: 22,fontWeight: FontWeight.w500,color: Colors.white),)
+                            Text('  ${((widget.apiresponse?.current?.tempC)?.round().toString())}\u00b0',style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 99,color: Colors.white),),
+                            Text(((widget.apiresponse?.current?.condition?.text).toString()),style: const TextStyle(fontSize: 22,fontWeight: FontWeight.w500,color: Colors.white),)
                           ],
                         ),
                       )
@@ -63,7 +63,7 @@ class _HomeVeiwState extends State<HomeVeiw> {
                           children:  [
                             const Text("Today",style: TextStyle(fontWeight:FontWeight.w500 ,fontSize: 20,fontFamily: 'Poppins'),),
                             const Spacer(),
-                            Text('${((widget.apiresponse.location?.name).toString()).split(" ")[0]}'+',${((widget.apiresponse.location?.country).toString())}',style: const TextStyle(fontSize: 15,color: Color(0xff5F5F5F),fontWeight: FontWeight.w500),)
+                            Text('${((widget.apiresponse?.location?.name).toString()).split(" ")[0]}'+',${((widget.apiresponse?.location?.country).toString())}',style: const TextStyle(fontSize: 15,color: Color(0xff5F5F5F),fontWeight: FontWeight.w500),)
                           ],
                         ),
                         const SizedBox(height: 39,),
@@ -90,10 +90,10 @@ class _HomeVeiwState extends State<HomeVeiw> {
                                       const Text("Now",style: const TextStyle(fontWeight: FontWeight.w500),),
                                       const SizedBox(height: 5,),
                                       SizedBox(height:42,width: 42,child:
-                                      Image.network('https:${(widget.apiresponse.current?.condition?.icon)??""}')
+                                      Image.network('https:${(widget.apiresponse?.current?.condition?.icon)??""}')
                                       ),
                                       const SizedBox(height: 5,),
-                                      Text((widget.apiresponse.current?.tempC).toString(),style: const TextStyle(fontWeight: FontWeight.w400,fontSize: 18)),
+                                      Text('${(widget.apiresponse?.current?.tempC)!.floor().toString()}\u00b0',style: const TextStyle(fontWeight: FontWeight.w400,fontSize: 18)),
                                       const SizedBox(height: 5,),
 
                                     ],
@@ -109,9 +109,9 @@ class _HomeVeiwState extends State<HomeVeiw> {
                                         return Padding(
                                           padding: const EdgeInsets.only(left:20),
                                           child: Forcast_card(
-                                              time: widget.dateFormat.format(DateTime.parse((widget.apiresponse.forecast?.forecastday?[0].hour?[index].time).toString())),
-                                              icon: widget.apiresponse.forecast?.forecastday?[0].hour?[index].condition?.icon,
-                                              temC: (widget.apiresponse.forecast?.forecastday?[0].hour?[0].tempC)!.round().toString()),
+                                              time: widget.dateFormat.format(DateTime.parse((widget.apiresponse?.forecast?.forecastday?[0].hour?[index].time).toString())),
+                                              icon: widget.apiresponse?.forecast?.forecastday?[0].hour?[index].condition?.icon,
+                                              temC: (widget.apiresponse?.forecast?.forecastday?[0].hour?[index].tempC)!.floor().toString()),
                                         );
 
 

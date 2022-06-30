@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class Forcast_card extends StatelessWidget {
   final String time;
   var icon;
-  final String temC;
+  String  temC;
   Forcast_card({Key? key,required this.time,required this.icon,required this.temC}) : super(key: key);
 
   @override
